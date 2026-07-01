@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MEXICO — Digital Banking</title>
+<meta name="description" content="MEXICO - Next generation digital banking experience">
+<meta name="theme-color" content="#080C18">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,200..900&family=Outfit:wght@200..900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="cursor-dot" id="cursor-dot"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+<canvas id="particles-canvas"></canvas>
+<div id="scroll-progress"></div>
+<div id="toast-container" aria-live="polite"></div>
+
+<div id="preloader">
+  <div class="preloader-logo">MEXICO</div>
+  <div class="preloader-boot" id="preloader-boot"></div>
+  <div class="preloader-bar-track"><div class="preloader-bar-fill" id="preloader-fill"></div></div>
+</div>
+
+<div id="auth-screen" class="hidden-auth">
+  <div class="auth-bg">
+    <div class="auth-blob auth-blob-1"></div>
+    <div class="auth-blob auth-blob-2"></div>
+    <div class="auth-blob auth-blob-3"></div>
+  </div>
+  <div class="auth-container">
+    <div class="auth-brand">
+      <div class="auth-brand-logo">MEXICO</div>
+      <p class="auth-brand-tagline">Experience the future of digital banking. Secure, fast, and beautifully designed for the modern world.</p>
+      <div class="auth-card-3d-wrap"><div class="auth-card-3d" id="auth-card-3d">
+        <div class="auth-card-logo">MEXICO</div>
+        <div class="auth-card-chip"></div>
+        <div class="auth-card-number">4532 &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; 7891</div>
+        <div class="auth-card-bottom">
+          <div class="auth-card-holder">Card Holder<div>Abdo mohamed</div></div>
+          <div class="auth-card-expiry">Expires<div>09/28</div></div>
+        </div>
+      </div></div>
+      <div class="auth-features">
+        <div class="auth-feature"><i class="fas fa-shield-halved"></i> 256-bit AES Encryption</div>
+        <div class="auth-feature"><i class="fas fa-bolt"></i> Instant Transfers</div>
+        <div class="auth-feature"><i class="fas fa-fingerprint"></i> Biometric Authentication</div>
+        <div class="auth-feature"><i class="fas fa-globe"></i> 180+ Countries Supported</div>
+      </div>
+    </div>
+    <div class="auth-form-side">
+      <div class="auth-form-box">
+        <div id="login-form">
+          <h2 class="auth-form-title">Welcome Back</h2>
+          <p class="auth-form-subtitle">Sign in to access your accounts</p>
+          <div class="form-group"><input type="email" class="form-input" id="login-email" placeholder=" " value="Abdo@mexico.com" autocomplete="email"><label for="login-email">Email Address</label><div class="form-error">Please enter a valid email</div></div>
+          <div class="form-group"><input type="password" class="form-input" id="login-password" placeholder=" " value="password123" autocomplete="current-password"><label for="login-password">Password</label><div class="form-error">Password must be at least 6 characters</div></div>
+          <div class="auth-form-options"><label><input type="checkbox" checked> Remember me</label><a href="#" id="forgot-password-link">Forgot password?</a></div>
+          <button class="btn btn-primary w-full" id="login-btn" style="padding:14px; font-size:0.95rem;"><span>Sign In</span><i class="fas fa-arrow-right"></i></button>
+          <div class="auth-form-divider">or continue with</div>
+          <div class="auth-social">
+            <button type="button" id="social-google"><i class="fab fa-google"></i></button>
+            <button type="button" id="social-apple"><i class="fab fa-apple"></i></button>
+            <button type="button" id="social-github"><i class="fab fa-github"></i></button>
+          </div>
+          <p class="auth-toggle">Don't have an account? <a href="#" id="show-register">Create one</a></p>
+        </div>
+        <div id="register-form" class="hidden">
+          <h2 class="auth-form-title">Create Account</h2>
+          <p class="auth-form-subtitle">Start your banking journey today</p>
+          <div class="form-group"><input type="text" class="form-input" id="reg-name" placeholder=" "><label for="reg-name">Full Name</label><div class="form-error">Please enter your name</div></div>
+          <div class="form-group"><input type="email" class="form-input" id="reg-email" placeholder=" "><label for="reg-email">Email Address</label><div class="form-error">Please enter a valid email</div></div>
+          <div class="form-group"><input type="password" class="form-input" id="reg-password" placeholder=" "><label for="reg-password">Password</label><div class="form-error">Password must be at least 6 characters</div></div>
+          <button class="btn btn-primary w-full" id="register-btn" style="padding:14px; font-size:0.95rem;"><span>Create Account</span><i class="fas fa-arrow-right"></i></button>
+          <p class="auth-toggle">Already have an account? <a href="#" id="show-login">Sign in</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="app-shell">
+  <div class="mobile-overlay" id="mobile-overlay"></div>
+  <nav class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
+    <div class="sidebar-logo"><div class="sidebar-logo-icon">M</div><div class="sidebar-logo-text">MEXICO</div></div>
+    <div class="sidebar-nav">
+      <button class="nav-item active" data-page="dashboard"><i class="fas fa-grip"></i><span>Dashboard</span></button>
+      <button class="nav-item" data-page="transactions"><i class="fas fa-arrow-right-arrow-left"></i><span>Transactions</span><span class="nav-badge">3</span></button>
+      <button class="nav-item" data-page="transfer"><i class="fas fa-paper-plane"></i><span>Transfer</span></button>
+      <button class="nav-item" data-page="cards"><i class="fas fa-credit-card"></i><span>Cards</span></button>
+      <button class="nav-item" data-page="settings"><i class="fas fa-gear"></i><span>Settings</span></button>
+    </div>
+    <div class="sidebar-footer"><div class="sidebar-user"><div class="sidebar-avatar">AK</div><div class="sidebar-user-info"><div class="sidebar-user-name">Abdo mohamed</div><div class="sidebar-user-role">Premium Account</div></div></div></div>
+  </nav>
+  <div class="main-content" id="main-content">
+    <div class="main-bg"><div class="main-blob main-blob-1"></div><div class="main-blob main-blob-2"></div></div>
+    <header class="topbar">
+      <div class="topbar-left"><button class="topbar-toggle" id="sidebar-toggle" aria-label="Toggle sidebar"><i class="fas fa-bars"></i></button><h1 class="topbar-title" id="page-title">Dashboard</h1></div>
+      <div class="topbar-right">
+        <button class="topbar-theme" id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
+        <button class="topbar-btn" id="notification-btn" aria-label="Notifications"><i class="fas fa-bell"></i><span class="badge"></span></button>
+        <button class="topbar-btn" id="logout-btn" aria-label="Logout"><i class="fas fa-right-from-bracket"></i></button>
+      </div>
+    </header>
+    <div class="page-content">
+      <div class="page-view active" id="view-dashboard">
+        <div class="dash-greeting"><h1 class="display-lg">Good morning, Abdo</h1><p>Here's your financial overview for today</p></div>
+        <div class="dash-stats" id="dash-stats"></div>
+        <div class="dash-grid">
+          <div class="card dash-chart-card">
+            <div class="dash-chart-header"><h3>Spending Overview</h3><div class="chart-tabs"><button class="chart-tab active" data-period="week">Week</button><button class="chart-tab" data-period="month">Month</button><button class="chart-tab" data-period="year">Year</button></div></div>
+            <canvas id="spending-chart"></canvas>
+          </div>
+          <div class="card dash-quick">
+            <h3>Quick Actions</h3>
+            <div class="quick-actions">
+              <button class="quick-action" data-action="transfer"><i class="fas fa-paper-plane"></i>Send Money</button>
+              <button class="quick-action" data-action="pay"><i class="fas fa-qrcode"></i>Scan & Pay</button>
+              <button class="quick-action" data-action="topup"><i class="fas fa-mobile-screen-button"></i>Top Up</button>
+              <button class="quick-action" data-action="bill"><i class="fas fa-file-invoice-dollar"></i>Pay Bills</button>
+              <button class="quick-action" data-action="invest"><i class="fas fa-chart-line"></i>Invest</button>
+              <button class="quick-action" data-action="exchange"><i class="fas fa-coins"></i>Exchange</button>
+            </div>
+          </div>
+        </div>
+        <div class="card dash-transactions">
+          <div class="dash-transactions-header"><h3>Recent Transactions</h3><button class="btn btn-ghost btn-sm" data-action="view-all-tx">View All <i class="fas fa-arrow-right" style="font-size:0.7rem;"></i></button></div>
+          <div class="tx-list" id="dash-tx-list"></div>
+        </div>
+      </div>
+      <div class="page-view" id="view-transactions">
+        <div class="dash-greeting" style="margin-bottom:20px;"><h1 class="display-lg">Transactions</h1><p>View and manage your transaction history</p></div>
+        <div class="tx-filters">
+          <div class="tx-search-wrap"><i class="fas fa-search"></i><input type="text" class="tx-search" id="tx-search" placeholder="Search transactions..."></div>
+          <button class="tx-filter-btn active" data-filter="all"><i class="fas fa-list"></i> All</button>
+          <button class="tx-filter-btn" data-filter="income"><i class="fas fa-arrow-down"></i> Income</button>
+          <button class="tx-filter-btn" data-filter="expense"><i class="fas fa-arrow-up"></i> Expense</button>
+          <button class="tx-filter-btn" data-filter="transfer"><i class="fas fa-arrow-right-arrow-left"></i> Transfers</button>
+        </div>
+        <div class="tx-table-wrap"><table class="tx-table"><thead><tr><th>Transaction</th><th>Date</th><th>Category</th><th>Status</th><th style="text-align:right;">Amount</th></tr></thead><tbody id="tx-table-body"></tbody></table></div>
+      </div>
+      <div class="page-view" id="view-transfer">
+        <div class="dash-greeting" style="margin-bottom:20px;"><h1 class="display-lg">Transfer Money</h1><p>Send funds securely to anyone, anywhere</p></div>
+        <div class="transfer-grid">
+          <div class="card transfer-form-card">
+            <h3>Transfer Details</h3>
+            <div class="form-group"><input type="text" class="form-input" id="transfer-recipient" placeholder=" "><label for="transfer-recipient">Recipient Name or IBAN</label><div class="form-error">Please enter a recipient</div></div>
+            <div class="form-group"><select class="form-input has-value" id="transfer-from" style="padding:14px; appearance:none;"><option>Main Account — $24,563.80</option><option>Savings Account — $58,200.00</option><option>Business Account — $12,340.50</option></select></div>
+            <div class="form-group"><input type="number" class="transfer-amount-input" id="transfer-amount" placeholder="0.00" min="0" step="0.01"></div>
+            <div class="transfer-quick-amounts"><button class="transfer-quick-amount" data-amount="50">$50</button><button class="transfer-quick-amount" data-amount="100">$100</button><button class="transfer-quick-amount" data-amount="250">$250</button><button class="transfer-quick-amount" data-amount="500">$500</button><button class="transfer-quick-amount" data-amount="1000">$1,000</button></div>
+            <div class="form-group"><textarea class="form-input" id="transfer-note" placeholder=" " rows="2" style="resize:none;"></textarea><label for="transfer-note">Note (optional)</label></div>
+            <button class="btn btn-primary w-full" id="send-transfer-btn" style="padding:14px; font-size:0.95rem;"><i class="fas fa-lock"></i><span>Send Securely</span></button>
+          </div>
+          <div class="card transfer-preview-card">
+            <h3>Preview</h3>
+            <div class="transfer-card-3d-wrap"><div class="transfer-card-3d" id="transfer-card-3d">
+              <div class="tc-top"><div class="tc-chip"></div><div class="tc-logo">MEXICO</div></div>
+              <div class="tc-number">4532 &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; 7891</div>
+              <div class="tc-bottom"><div class="tc-holder">From<div>Abdo mohamed</div></div><div class="tc-amount-display" id="tc-amount">$0.00</div></div>
+            </div></div>
+            <div class="recent-recipients"><h4>Recent Recipients</h4><div class="recipient-list" id="recipient-list"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="page-view" id="view-cards">
+        <div class="dash-greeting" style="margin-bottom:20px; text-align:center;"><h1 class="display-lg">Your Cards</h1><p>Manage and customize your payment cards</p></div>
+        <div class="cards-showcase">
+          <div class="card-3d-main-wrap" id="card-3d-main-wrap"><div class="card-3d-main" id="card-3d-main">
+            <div class="cm-top"><div class="cm-chip"></div><div class="cm-nfc"><i class="fas fa-wifi"></i></div></div>
+            <div class="cm-number">4532 8721 0056 7891</div>
+            <div class="cm-bottom"><div><div class="cm-holder-label">Card Holder</div><div class="cm-holder-name">Abdo mohamed</div></div><div style="text-align:right;"><div class="cm-exp-label">Expires</div><div class="cm-exp-value">09/28</div></div><div class="cm-brand">MEXICO</div></div>
+          </div></div>
+          <div class="card-details-grid">
+            <div class="card card-detail-item"><div class="card-detail-label">Card Type</div><div class="card-detail-value">Platinum</div></div>
+            <div class="card card-detail-item"><div class="card-detail-label">Credit Limit</div><div class="card-detail-value">$50,000</div></div>
+            <div class="card card-detail-item"><div class="card-detail-label">Available</div><div class="card-detail-value text-success">$42,150</div></div>
+          </div>
+          <div class="card-actions">
+            <button class="card-action-btn" id="freeze-card-btn"><i class="fas fa-snowflake"></i>Freeze Card</button>
+            <button class="card-action-btn" data-card-action="limits"><i class="fas fa-sliders"></i>Set Limits</button>
+            <button class="card-action-btn" data-card-action="pin"><i class="fas fa-key"></i>Change PIN</button>
+            <button class="card-action-btn" data-card-action="statement"><i class="fas fa-file-lines"></i>Statement</button>
+          </div>
+        </div>
+      </div>
+      <div class="page-view" id="view-settings">
+        <div class="dash-greeting" style="margin-bottom:20px;"><h1 class="display-lg">Settings</h1><p>Manage your account preferences</p></div>
+        <div class="card" style="padding:4px 0; margin-bottom:24px;">
+          <div class="settings-section">
+            <h3>Security</h3>
+            <div class="setting-item"><div class="setting-info"><div class="setting-icon"><i class="fas fa-fingerprint"></i></div><div><div class="setting-label">Biometric Login</div><div class="setting-desc">Use fingerprint or face ID</div></div></div><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+            <div class="setting-item"><div class="setting-info"><div class="setting-icon"><i class="fas fa-shield-halved"></i></div><div><div class="setting-label">Two-Factor Authentication</div><div class="setting-desc">Extra layer of security</div></div></div><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+            <div class="setting-item"><div class="setting-info"><div class="setting-icon"><i class="fas fa-bell"></i></div><div><div class="setting-label">Transaction Alerts</div><div class="setting-desc">Get notified for every transaction</div></div></div><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+          </div>
+          <div class="settings-section">
+            <h3>Preferences</h3>
+            <div class="setting-item"><div class="setting-info"><div class="setting-icon"><i class="fas fa-envelope"></i></div><div><div class="setting-label">Email Notifications</div><div class="setting-desc">Weekly statements and offers</div></div></div><label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label></div>
+            <div class="setting-item"><div class="setting-info"><div class="setting-icon"><i class="fas fa-moon"></i></div><div><div class="setting-label">Dark Mode</div><div class="setting-desc">Switch between light and dark</div></div></div><label class="toggle"><input type="checkbox" id="settings-dark-toggle" checked><span class="toggle-slider"></span></label></div>
+            <div class="setting-item"><div class="setting-info"><div class="setting-icon"><i class="fas fa-language"></i></div><div><div class="setting-label">Language</div><div class="setting-desc">English (US)</div></div></div><button class="btn btn-ghost btn-sm" id="language-btn">Change</button></div>
+          </div>
+        </div>
+        <button class="btn btn-secondary" style="border-color:var(--danger); color:var(--danger);" id="delete-account-btn"><i class="fas fa-trash"></i> Delete Account</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal-box" id="modal-box" role="dialog" aria-modal="true">
+    <div class="modal-header">
+      <h3 id="modal-title">Confirm</h3>
+      <button class="modal-close" id="modal-close" aria-label="Close modal"><i class="fas fa-xmark"></i></button>
+    </div>
+    <div class="modal-body" id="modal-content"></div>
+    <div class="modal-footer" id="modal-footer"></div>
+  </div>
+</div>
+
+<script>
+var DATA = {
+  user: { name: 'Abdo mohamed', email: 'Abdo@mexico.com', initials: 'AK' },
+  accounts: [
+    { name: 'Main Account', balance: 24563.80 },
+    { name: 'Savings', balance: 58200.00 },
+    { name: 'Business', balance: 12340.50 }
+  ],
+  transactions: [
+    { id:1, name:'Salary Deposit', icon:'fa-building-columns', type:'income', category:'Salary', date:'2025-01-15', amount:8500.00, status:'completed' },
+    { id:2, name:'Amazon Purchase', icon:'fa-cart-shopping', type:'expense', category:'Shopping', date:'2025-01-14', amount:-234.50, status:'completed' },
+    { id:3, name:'Transfer to Sarah', icon:'fa-paper-plane', type:'transfer', category:'Transfer', date:'2025-01-14', amount:-500.00, status:'completed' },
+    { id:4, name:'Netflix Subscription', icon:'fa-tv', type:'expense', category:'Entertainment', date:'2025-01-13', amount:-15.99, status:'completed' },
+    { id:5, name:'Freelance Payment', icon:'fa-laptop-code', type:'income', category:'Freelance', date:'2025-01-13', amount:2200.00, status:'completed' },
+    { id:6, name:'Restaurant', icon:'fa-utensils', type:'expense', category:'Food', date:'2025-01-12', amount:-87.40, status:'completed' },
+    { id:7, name:'Uber Ride', icon:'fa-car', type:'expense', category:'Transport', date:'2025-01-12', amount:-24.50, status:'completed' },
+    { id:8, name:'Transfer from Omar', icon:'fa-paper-plane', type:'transfer', category:'Transfer', date:'2025-01-11', amount:350.00, status:'pending' },
+    { id:9, name:'Electric Bill', icon:'fa-bolt', type:'expense', category:'Bills', date:'2025-01-11', amount:-142.00, status:'completed' },
+    { id:10, name:'Gym Membership', icon:'fa-dumbbell', type:'expense', category:'Health', date:'2025-01-10', amount:-49.99, status:'completed' },
+    { id:11, name:'Investment Return', icon:'fa-chart-line', type:'income', category:'Investment', date:'2025-01-10', amount:680.25, status:'completed' },
+    { id:12, name:'Apple Store', icon:'fa-apple-whole', type:'expense', category:'Shopping', date:'2025-01-09', amount:-1299.00, status:'failed' },
+    { id:13, name:'Coffee Shop', icon:'fa-mug-hot', type:'expense', category:'Food', date:'2025-01-09', amount:-6.80, status:'completed' },
+    { id:14, name:'Transfer to Mom', icon:'fa-paper-plane', type:'transfer', category:'Transfer', date:'2025-01-08', amount:-1000.00, status:'pending' },
+    { id:15, name:'Bonus Payment', icon:'fa-gift', type:'income', category:'Salary', date:'2025-01-08', amount:1500.00, status:'completed' }
+  ],
+  chartData: {
+    week: { labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'], values:[320,580,120,890,440,250,670] },
+    month: { labels:['W1','W2','W3','W4'], values:[2100,3400,1800,2900] },
+    year: { labels:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'], values:[4200,3800,5100,4600,5200,4900,6100,5800,6400,5600,7200,6800] }
+  },
+  recipients: [
+    { name:'Sarah', initials:'SA', color:'#38BDF8' },
+    { name:'Omar', initials:'OM', color:'#06D6A0' },
+    { name:'Mom', initials:'MO', color:'#FBBF24' },
+    { name:'Khaled', initials:'KH', color:'#F43F5E' },
+    { name:'Lina', initials:'LI', color:'#A78BFA' }
+  ]
+};
+
+var Toast = {
+  show: function(msg, type, duration) {
+    type = type || 'info';
+    duration = duration || 4000;
+    var container = document.getElementById('toast-container');
+    if (!container) return;
+    var icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', info: 'fa-info-circle' };
+    var toast = document.createElement('div');
+    toast.className = 'toast ' + type;
+    toast.innerHTML = '<i class="fas ' + (icons[type] || icons.info) + ' toast-icon"></i><span>' + msg + '</span><div class="toast-progress" style="animation-duration:' + duration + 'ms;"></div>';
+    container.appendChild(toast);
+    setTimeout(function() {
+      toast.classList.add('removing');
+      setTimeout(function() { if (toast.parentNode) toast.parentNode.removeChild(toast); }, 300);
+    }, duration);
+  }
+};
+
+var Modal = {
+  open: function(title, body, footer) {
+    var mt = document.getElementById('modal-title');
+    var mc = document.getElementById('modal-content');
+    var mf = document.getElementById('modal-footer');
+    var mo = document.getElementById('modal-overlay');
+    if (mt) mt.textContent = title;
+    if (mc) mc.innerHTML = body;
+    if (mf) mf.innerHTML = footer || '';
+    if (mo) mo.classList.add('active');
+  },
+  close: function() {
+    var mo = document.getElementById('modal-overlay');
+    if (mo) mo.classList.remove('active');
+  }
+};
+
+function initPreloader() {
+  var el = document.getElementById('preloader');
+  var boot = document.getElementById('preloader-boot');
+  var fill = document.getElementById('preloader-fill');
+  if (!el || !boot || !fill) return;
+  var lines = [
+    '> INITIALIZING MEXICO CORE v4.2.1...',
+    '> Loading secure modules.............. OK',
+    '> Establishing encrypted connection... OK',
+    '> Verifying SSL certificates.......... OK',
+    '> Loading account data................ OK',
+    '> Rendering 3D assets................. OK',
+    '> SYSTEM READY'
+  ];
+  var lineIdx = 0;
+  var progress = 0;
+  function addLine() {
+    if (lineIdx >= lines.length) return;
+    var div = document.createElement('div');
+    div.className = 'line';
+    div.textContent = lines[lineIdx];
+    boot.appendChild(div);
+    lineIdx++;
+    var delay = lineIdx < lines.length ? 200 + Math.random() * 150 : 400;
+    setTimeout(addLine, delay);
+  }
+  addLine();
+  function tick() {
+    var target = (lineIdx / lines.length) * 100;
+    progress += (target - progress) * 0.08;
+    if (progress > 99.5) progress = 100;
+    fill.style.width = progress + '%';
+    if (progress < 100) {
+      requestAnimationFrame(tick);
+    } else {
+      setTimeout(function() {
+        el.classList.add('done');
+        setTimeout(function() {
+          var authScreen = document.getElementById('auth-screen');
+          if (authScreen) authScreen.classList.remove('hidden-auth');
+        }, 300);
+      }, 500);
+    }
+  }
+  requestAnimationFrame(tick);
+}
+
+function initCursor() {
+  if (window.matchMedia('(max-width: 768px)').matches) return;
+  var dot = document.getElementById('cursor-dot');
+  var ring = document.getElementById('cursor-ring');
+  if (!dot || !ring) return;
+  var mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', function(e) {
+    mx = e.clientX; my = e.clientY;
+    dot.style.left = mx + 'px';
+    dot.style.top = my + 'px';
+  });
+  (function loop() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(loop);
+  })();
+  document.addEventListener('mouseover', function(e) {
+    var t = e.target.closest('a, button, .nav-item, .quick-action, .tx-item, .recipient, .card-action-btn, .chart-tab, .tx-filter-btn, .transfer-quick-amount, .toggle, .topbar-btn, .topbar-theme, .setting-item');
+    if (t) { ring.classList.add('hover'); } else { ring.classList.remove('hover'); }
+  });
+  document.addEventListener('mousedown', function() { ring.classList.add('click'); });
+  document.addEventListener('mouseup', function() { ring.classList.remove('click'); });
+}
+
+function initParticles() {
+  var canvas = document.getElementById('particles-canvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  if (!ctx) return;
+  var particles = [];
+  var mouse = { x: -1000, y: -1000 };
+  function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+  document.addEventListener('mousemove', function(e) { mouse.x = e.clientX; mouse.y = e.clientY; });
+  var count = window.matchMedia('(max-width: 768px)').matches ? 30 : 60;
+  for (var i = 0; i < count; i++) {
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: (Math.random() - 0.5) * 0.3,
+      r: Math.random() * 1.5 + 0.5,
+      o: Math.random() * 0.3 + 0.08
+    });
+  }
+  function animate() {
+    var w = canvas.width;
+    var h = canvas.height;
+    ctx.clearRect(0, 0, w, h);
+    for (var i = 0; i < particles.length; i++) {
+      var p = particles[i];
+      var dx = p.x - mouse.x;
+      var dy = p.y - mouse.y;
+      var dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 120 && dist > 0.01) {
+        var force = (120 - dist) / 120 * 0.5;
+        p.vx += (dx / dist) * force;
+        p.vy += (dy / dist) * force;
+      }
+      p.vx *= 0.98;
+      p.vy *= 0.98;
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.x < 0) p.x = w;
+      if (p.x > w) p.x = 0;
+      if (p.y < 0) p.y = h;
+      if (p.y > h) p.y = 0;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, Math.max(0.1, p.r), 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(6,214,160,' + p.o + ')';
+      ctx.fill();
+    }
+    for (var a = 0; a < particles.length; a++) {
+      for (var b = a + 1; b < particles.length; b++) {
+        var pa = particles[a];
+        var pb = particles[b];
+        var ddx = pa.x - pb.x;
+        var ddy = pa.y - pb.y;
+        var dd = Math.sqrt(ddx * ddx + ddy * ddy);
+        if (dd < 130) {
+          ctx.beginPath();
+          ctx.moveTo(pa.x, pa.y);
+          ctx.lineTo(pb.x, pb.y);
+          ctx.strokeStyle = 'rgba(6,214,160,' + (0.04 * (1 - dd / 130)) + ')';
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(animate);
+  }
+  animate();
+}
+
+function initAuth() {
+  var screen = document.getElementById('auth-screen');
+  var appShell = document.getElementById('app-shell');
+  if (!screen || !appShell) return;
+
+  document.getElementById('show-register').addEventListener('click', function(e) {
+    e.preventDefault();
+    document.getElementById('login-form').classList.add('hidden');
+    document.getElementById('register-form').classList.remove('hidden');
+  });
+  document.getElementById('show-login').addEventListener('click', function(e) {
+    e.preventDefault();
+    document.getElementById('register-form').classList.add('hidden');
+    document.getElementById('login-form').classList.remove('hidden');
+  });
+
+  document.getElementById('forgot-password-link').addEventListener('click', function(e) {
+    e.preventDefault();
+    Modal.open('Reset Password',
+      '<div class="modal-body"><p>Enter your email and we\'ll send you a reset link.</p>' +
+      '<div class="form-group"><input type="email" class="form-input" id="reset-email" placeholder=" " value="abd@mexico.com"><label for="reset-email">Email Address</label></div>' +
+      '<button class="btn btn-primary w-full" id="send-reset-btn" style="padding:12px;">Send Reset Link</button></div>',
+      '<div class="modal-footer"><button class="btn btn-secondary btn-sm" id="modal-cancel-btn">Cancel</button></div>'
+    );
+    setTimeout(function() {
+      var resetBtn = document.getElementById('send-reset-btn');
+      if (resetBtn) {
+        resetBtn.addEventListener('click', function() {
+          resetBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+          resetBtn.disabled = true;
+          setTimeout(function() { Modal.close(); Toast.show('Password reset link sent to your email', 'success'); }, 1500);
+        });
+      }
+    }, 50);
+  });
+
+  document.getElementById('social-google').addEventListener('click', function() { Toast.show('Google sign-in coming soon', 'info'); });
+  document.getElementById('social-apple').addEventListener('click', function() { Toast.show('Apple sign-in coming soon', 'info'); });
+  document.getElementById('social-github').addEventListener('click', function() { Toast.show('GitHub sign-in coming soon', 'info'); });
+
+  function doLogin() {
+    var email = document.getElementById('login-email').value.trim();
+    var pass = document.getElementById('login-password').value;
+    var valid = true;
+    var emailGroup = document.getElementById('login-email').closest('.form-group');
+    var passGroup = document.getElementById('login-password').closest('.form-group');
+    emailGroup.classList.remove('has-error');
+    passGroup.classList.remove('has-error');
+    if (!email || email.indexOf('@') === -1) { emailGroup.classList.add('has-error'); valid = false; }
+    if (!pass || pass.length < 6) { passGroup.classList.add('has-error'); valid = false; }
+    if (!valid) { Toast.show('Please fix the errors above', 'error'); return; }
+
+    var btn = document.getElementById('login-btn');
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
+    btn.disabled = true;
+    setTimeout(function() {
+      screen.classList.add('hidden-auth');
+      appShell.classList.add('active');
+      btn.innerHTML = '<span>Sign In</span><i class="fas fa-arrow-right"></i>';
+      btn.disabled = false;
+      Toast.show('Welcome back, Abdo!', 'success');
+      initDashboard();
+    }, 1500);
+  }
+
+  document.getElementById('login-btn').addEventListener('click', doLogin);
+  document.getElementById('login-password').addEventListener('keydown', function(e) { if (e.key === 'Enter') doLogin(); });
+
+  document.getElementById('register-btn').addEventListener('click', function() {
+    var name = document.getElementById('reg-name').value.trim();
+    var email = document.getElementById('reg-email').value.trim();
+    var pass = document.getElementById('reg-password').value;
+    var valid = true;
+    var nameG = document.getElementById('reg-name').closest('.form-group');
+    var emailG = document.getElementById('reg-email').closest('.form-group');
+    var passG = document.getElementById('reg-password').closest('.form-group');
+    nameG.classList.remove('has-error');
+    emailG.classList.remove('has-error');
+    passG.classList.remove('has-error');
+    if (!name) { nameG.classList.add('has-error'); valid = false; }
+    if (!email || email.indexOf('@') === -1) { emailG.classList.add('has-error'); valid = false; }
+    if (!pass || pass.length < 6) { passG.classList.add('has-error'); valid = false; }
+    if (!valid) { Toast.show('Please fix the errors above', 'error'); return; }
+    Toast.show('Account created successfully!', 'success');
+    document.getElementById('register-form').classList.add('hidden');
+    document.getElementById('login-form').classList.remove('hidden');
+  });
+
+  document.getElementById('logout-btn').addEventListener('click', function() {
+    appShell.classList.remove('active');
+    setTimeout(function() {
+      screen.classList.remove('hidden-auth');
+      Toast.show('Logged out successfully', 'info');
+    }, 300);
+  });
+
+  var authCard = document.getElementById('auth-card-3d');
+  if (authCard) {
+    var authWrap = authCard.parentElement;
+    authWrap.addEventListener('mousemove', function(e) {
+      var rect = authWrap.getBoundingClientRect();
+      var x = (e.clientX - rect.left) / rect.width - 0.5;
+      var y = (e.clientY - rect.top) / rect.height - 0.5;
+      authCard.style.animation = 'none';
+      authCard.style.transform = 'perspective(1000px) rotateY(' + (x * 20) + 'deg) rotateX(' + (-y * 20) + 'deg)';
+    });
+    authWrap.addEventListener('mouseleave', function() {
+      authCard.style.animation = 'cardFloat 4s ease-in-out infinite';
+      authCard.style.transform = '';
+    });
+  }
+}
+
+function navigateTo(page) {
+  document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
+  var navBtn = document.querySelector('.nav-item[data-page="' + page + '"]');
+  if (navBtn) navBtn.classList.add('active');
+  document.querySelectorAll('.page-view').forEach(function(v) { v.classList.remove('active'); });
+  var view = document.getElementById('view-' + page);
+  if (view) view.classList.add('active');
+  var titles = { dashboard: 'Dashboard', transactions: 'Transactions', transfer: 'Transfer', cards: 'Cards', settings: 'Settings' };
+  var titleEl = document.getElementById('page-title');
+  if (titleEl) titleEl.textContent = titles[page] || page;
+  if (page === 'transactions') renderTransactionsTable();
+  if (page === 'cards') initCards3D();
+}
+
+function initNavigation() {
+  var sidebar = document.getElementById('sidebar');
+  var overlay = document.getElementById('mobile-overlay');
+  var mainContent = document.getElementById('main-content');
+
+  document.getElementById('sidebar-toggle').addEventListener('click', function() {
+    if (window.innerWidth <= 768) {
+      sidebar.classList.toggle('mobile-open');
+      overlay.classList.toggle('active');
+    } else {
+      sidebar.classList.toggle('collapsed');
+      if (mainContent) mainContent.classList.toggle('sidebar-collapsed');
+    }
+  });
+
+  overlay.addEventListener('click', function() {
+    sidebar.classList.remove('mobile-open');
+    overlay.classList.remove('active');
+  });
+
+  document.querySelectorAll('.nav-item').forEach(function(item) {
+    item.addEventListener('click', function() {
+      navigateTo(item.dataset.page);
+      if (window.innerWidth <= 768) {
+        sidebar.classList.remove('mobile-open');
+        overlay.classList.remove('active');
+      }
+    });
+  });
+
+  document.querySelectorAll('[data-action]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var action = btn.dataset.action;
+      if (action === 'transfer' || action === 'pay') navigateTo('transfer');
+      else if (action === 'view-all-tx') navigateTo('transactions');
+      else Toast.show(action.charAt(0).toUpperCase() + action.slice(1) + ' feature coming soon', 'info');
+    });
+  });
+
+  document.getElementById('notification-btn').addEventListener('click', function() {
+    Modal.open('Notifications',
+      '<div class="modal-body"><div style="display:flex;flex-direction:column;gap:12px;">' +
+      '<div style="display:flex;gap:12px;align-items:start;padding:10px;border-radius:8px;background:rgba(6,214,160,0.04);border:1px solid var(--border);"><div style="width:36px;height:36px;border-radius:8px;background:rgba(6,214,160,0.1);display:flex;align-items:center;justify-content:center;color:var(--accent);flex-shrink:0;"><i class="fas fa-check"></i></div><div><div style="font-size:0.85rem;font-weight:500;">Transfer completed</div><div style="font-size:0.75rem;color:var(--fg-muted);">$500 sent to Sarah — 2 min ago</div></div></div>' +
+      '<div style="display:flex;gap:12px;align-items:start;padding:10px;border-radius:8px;background:rgba(56,189,248,0.04);border:1px solid var(--border);"><div style="width:36px;height:36px;border-radius:8px;background:rgba(56,189,248,0.1);display:flex;align-items:center;justify-content:center;color:var(--accent-2);flex-shrink:0;"><i class="fas fa-shield-halved"></i></div><div><div style="font-size:0.85rem;font-weight:500;">Security alert</div><div style="font-size:0.75rem;color:var(--fg-muted);">New login from Chrome — 1 hour ago</div></div></div>' +
+      '<div style="display:flex;gap:12px;align-items:start;padding:10px;border-radius:8px;border:1px solid var(--border);"><div style="width:36px;height:36px;border-radius:8px;background:rgba(251,191,36,0.1);display:flex;align-items:center;justify-content:center;color:var(--warning);flex-shrink:0;"><i class="fas fa-clock"></i></div><div><div style="font-size:0.85rem;font-weight:500;">Pending transfer</div><div style="font-size:0.75rem;color:var(--fg-muted);">Omar sent you $350 — awaiting confirmation</div></div></div></div></div>',
+      '<div class="modal-footer"><button class="btn btn-secondary btn-sm" onclick="Modal.close()">Close</button></div>'
+    );
+  });
+
+  window.addEventListener('scroll', function() {
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    var pct = h > 0 ? (window.scrollY / h) * 100 : 0;
+    var sp = document.getElementById('scroll-progress');
+    if (sp) sp.style.width = pct + '%';
+  }, { passive: true });
+}
+
+var dashboardInited = false;
+
+function initDashboard() {
+  if (dashboardInited) return;
+  dashboardInited = true;
+  renderStats();
+  renderRecentTx();
+  var activeTab = document.querySelector('.chart-tab.active');
+  if (activeTab) renderChart(activeTab.dataset.period);
+  document.querySelectorAll('.chart-tab').forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('.chart-tab').forEach(function(t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+      renderChart(tab.dataset.period);
+    });
+  });
+}
+
+function formatDate(dateStr) {
+  var d = new Date(dateStr);
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return months[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
+}
+
+function renderStats() {
+  var container = document.getElementById('dash-stats');
+  if (!container) return;
+  var stats = [
+    { label:'Total Balance', value:'$95,104.30', icon:'fa-wallet', change:'+12.5%', dir:'up', cls:'mint' },
+    { label:'Monthly Income', value:'$12,800.25', icon:'fa-arrow-trend-up', change:'+8.3%', dir:'up', cls:'blue' },
+    { label:'Monthly Expenses', value:'$2,860.18', icon:'fa-arrow-trend-down', change:'-4.2%', dir:'down', cls:'rose' },
+    { label:'Pending', value:'$1,350.00', icon:'fa-clock', change:'3 transactions', dir:'', cls:'violet' }
+  ];
+  var html = '';
+  for (var i = 0; i < stats.length; i++) {
+    var s = stats[i];
+    var icon = s.dir === 'up' ? '<i class="fas fa-caret-up"></i>' : s.dir === 'down' ? '<i class="fas fa-caret-down"></i>' : '<i class="fas fa-info-circle"></i>';
+    html += '<div class="card stat-card stat-card-' + s.cls + '" style="animation:fadeInUp 0.5s ' + (i * 0.1) + 's both;">' +
+      '<div class="stat-label"><i class="fas ' + s.icon + '"></i> ' + s.label + '</div>' +
+      '<div class="stat-value">' + s.value + '</div>' +
+      '<div class="stat-change ' + s.dir + '">' + icon + ' ' + s.change + '</div></div>';
+  }
+  container.innerHTML = html;
+}
+
+function renderRecentTx() {
+  var container = document.getElementById('dash-tx-list');
+  if (!container) return;
+  var html = '';
+  var list = DATA.transactions.slice(0, 6);
+  for (var i = 0; i < list.length; i++) {
+    var tx = list[i];
+    var cls = tx.amount >= 0 ? 'positive' : 'negative';
+    var prefix = tx.amount >= 0 ? '+' : '';
+    html += '<div class="tx-item" style="animation:fadeInUp 0.4s ' + (i * 0.06) + 's both;">' +
+      '<div class="tx-icon ' + tx.type + '"><i class="fas ' + tx.icon + '"></i></div>' +
+      '<div class="tx-details"><div class="tx-name">' + tx.name + '</div><div class="tx-date">' + formatDate(tx.date) + '</div></div>' +
+      '<div class="tx-amount ' + cls + '">' + prefix + '$' + Math.abs(tx.amount).toFixed(2) + '</div></div>';
+  }
+  container.innerHTML = html;
+}
+
+function renderChart(period) {
+  var canvas = document.getElementById('spending-chart');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  if (!ctx) return;
+  var dpr = window.devicePixelRatio || 1;
+  var parent = canvas.parentElement;
+  if (!parent) return;
+  var rect = parent.getBoundingClientRect();
+  var totalW = rect.width;
+  if (totalW < 100) totalW = 200;
+  var h = 200;
+  canvas.width = totalW * dpr;
+  canvas.height = h * dpr;
+  canvas.style.width = totalW + 'px';
+  canvas.style.height = h + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  var data = DATA.chartData[period];
+  if (!data || !data.labels || !data.values) return;
+  var maxVal = Math.max.apply(null, data.values) * 1.2;
+  if (!isFinite(maxVal) || maxVal <= 0) maxVal = 100;
+  ctx.clearRect(0, 0, totalW, h);
+  for (var i = 0; i <= 4; i++) {
+    var y = 20 + (h - 50) * (i / 4);
+    ctx.beginPath();
+    ctx.moveTo(40, y);
+    ctx.lineTo(totalW - 10, y);
+    ctx.strokeStyle = 'rgba(139,157,195,0.06)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    ctx.fillStyle = 'rgba(139,157,195,0.35)';
+    ctx.font = '10px "JetBrains Mono", monospace';
+    ctx.textAlign = 'right';
+    ctx.fillText('$' + Math.round(maxVal * (1 - i / 4)), 35, y + 3);
+  }
+  var startX = 50;
+  var totalBarSpace = totalW - startX - 20;
+  if (totalBarSpace < 50) totalBarSpace = 50;
+  var barGap = totalBarSpace / data.labels.length;
+  var barW = Math.max(8, barGap - 12);
+  for (var j = 0; j < data.values.length; j++) {
+    var val = data.values[j];
+    var barH = Math.max(1, (val / maxVal) * (h - 50));
+    var x = startX + j * barGap + (barGap - barW) / 2;
+    var yy = h - 30 - barH;
+    var grad = ctx.createLinearGradient(x, yy, x, h - 30);
+    grad.addColorStop(0, '#06D6A0');
+    grad.addColorStop(1, 'rgba(6,214,160,0.15)');
+    var r = Math.min(4, barW / 2);
+    ctx.beginPath();
+    ctx.moveTo(x + r, yy);
+    ctx.lineTo(x + barW - r, yy);
+    ctx.quadraticCurveTo(x + barW, yy, x + barW, yy + r);
+    ctx.lineTo(x + barW, h - 30);
+    ctx.lineTo(x, h - 30);
+    ctx.lineTo(x, yy + r);
+    ctx.quadraticCurveTo(x, yy, x + r, yy);
+    ctx.fillStyle = grad;
+    ctx.fill();
+    ctx.fillStyle = 'rgba(139,157,195,0.45)';
+    ctx.font = '11px "DM Sans", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(data.labels[j], x + barW / 2, h - 12);
+  }
+}
+
+var txFilter = 'all';
+var txSearch = '';
+
+function initTransactionsPage() {
+  document.querySelectorAll('.tx-filter-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.tx-filter-btn').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      txFilter = btn.dataset.filter;
+      renderTransactionsTable();
+    });
+  });
+  var searchInput = document.getElementById('tx-search');
+  if (searchInput) {
+    searchInput.addEventListener('input', function(e) {
+      txSearch = e.target.value.toLowerCase();
+      renderTransactionsTable();
+    });
+  }
+}
+
+function renderTransactionsTable() {
+  var tbody = document.getElementById('tx-table-body');
+  if (!tbody) return;
+  var txs = DATA.transactions.slice();
+  if (txFilter !== 'all') {
+    txs = txs.filter(function(t) { return t.type === txFilter; });
+  }
+  if (txSearch) {
+    txs = txs.filter(function(t) {
+      return t.name.toLowerCase().indexOf(txSearch) !== -1 || t.category.toLowerCase().indexOf(txSearch) !== -1;
+    });
+  }
+  if (!txs.length) {
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--fg-muted);">No transactions found</td></tr>';
+    return;
+  }
+  var html = '';
+  for (var i = 0; i < txs.length; i++) {
+    var tx = txs[i];
+    var amtCls = tx.amount >= 0 ? 'text-success' : 'text-danger';
+    var prefix = tx.amount >= 0 ? '+' : '';
+    html += '<tr style="animation:fadeInUp 0.3s ' + (i * 0.04) + 's both;">' +
+      '<td><div style="display:flex;align-items:center;gap:12px;">' +
+      '<div class="tx-icon ' + tx.type + '" style="width:36px;height:36px;border-radius:8px;font-size:0.8rem;"><i class="fas ' + tx.icon + '"></i></div>' +
+      '<span style="font-weight:500;">' + tx.name + '</span></div></td>' +
+      '<td style="color:var(--fg-muted);font-size:0.82rem;">' + new Date(tx.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + '</td>' +
+      '<td><span style="font-size:0.82rem;color:var(--fg-secondary);">' + tx.category + '</span></td>' +
+      '<td><span class="tx-status ' + tx.status + '">' + tx.status.charAt(0).toUpperCase() + tx.status.slice(1) + '</span></td>' +
+      '<td style="text-align:right;font-family:var(--font-mono);font-weight:600;" class="' + amtCls + '">' + prefix + '$' + Math.abs(tx.amount).toFixed(2) + '</td></tr>';
+  }
+  tbody.innerHTML = html;
+}
+
+function initTransferPage() {
+  var cardEl = document.getElementById('transfer-card-3d');
+  var amountDisplay = document.getElementById('tc-amount');
+  var amountInput = document.getElementById('transfer-amount');
+
+  if (amountInput && amountDisplay) {
+    amountInput.addEventListener('input', function() {
+      var val = parseFloat(amountInput.value) || 0;
+      amountDisplay.textContent = '$' + val.toFixed(2);
+    });
+  }
+
+  document.querySelectorAll('.transfer-quick-amount').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      if (amountInput) {
+        amountInput.value = btn.dataset.amount;
+        amountInput.dispatchEvent(new Event('input'));
+      }
+    });
+  });
+
+  document.getElementById('send-transfer-btn').addEventListener('click', function() {
+    var recipient = document.getElementById('transfer-recipient').value.trim();
+    var amount = parseFloat(amountInput ? amountInput.value : '0');
+    var valid = true;
+    var rGroup = document.getElementById('transfer-recipient').closest('.form-group');
+    if (rGroup) rGroup.classList.remove('has-error');
+    if (!recipient) { if (rGroup) rGroup.classList.add('has-error'); valid = false; }
+    if (!amount || amount <= 0 || isNaN(amount)) { Toast.show('Please enter a valid amount', 'error'); valid = false; }
+    if (!valid) return;
+
+    var btn = document.getElementById('send-transfer-btn');
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+    btn.disabled = true;
+
+    setTimeout(function() {
+      DATA.transactions.unshift({
+        id: Date.now(), name: 'Transfer to ' + recipient, icon: 'fa-paper-plane',
+        type: 'transfer', category: 'Transfer', date: new Date().toISOString().split('T')[0],
+        amount: -amount, status: 'completed'
+      });
+      btn.innerHTML = '<i class="fas fa-check"></i> Sent Successfully!';
+      btn.style.background = 'var(--success)';
+      Toast.show('$' + amount.toFixed(2) + ' sent to ' + recipient, 'success');
+      setTimeout(function() {
+        btn.innerHTML = '<i class="fas fa-lock"></i><span>Send Securely</span>';
+        btn.style.background = '';
+        btn.disabled = false;
+        if (amountInput) amountInput.value = '';
+        var recInput = document.getElementById('transfer-recipient');
+        if (recInput) recInput.value = '';
+        if (amountDisplay) amountDisplay.textContent = '$0.00';
+        var noteInput = document.getElementById('transfer-note');
+        if (noteInput) noteInput.value = '';
+      }, 2000);
+    }, 1800);
+  });
+
+  var container = document.getElementById('recipient-list');
+  if (container) {
+    var html = '';
+    for (var i = 0; i < DATA.recipients.length; i++) {
+      var r = DATA.recipients[i];
+      html += '<div class="recipient" data-name="' + r.name + '">' +
+        '<div class="recipient-avatar" style="background:' + r.color + '15;color:' + r.color + ';">' + r.initials + '</div>' +
+        '<span>' + r.name + '</span></div>';
+    }
+    container.innerHTML = html;
+    container.addEventListener('click', function(e) {
+      var r = e.target.closest('.recipient');
+      if (r) {
+        var recInput = document.getElementById('transfer-recipient');
+        if (recInput) recInput.value = r.dataset.name;
+        Toast.show('Selected ' + r.dataset.name, 'info');
+      }
+    });
+  }
+
+  if (cardEl) {
+    var wrap = cardEl.parentElement;
+    wrap.addEventListener('mousemove', function(e) {
+      var rect = wrap.getBoundingClientRect();
+      var x = (e.clientX - rect.left) / rect.width - 0.5;
+      var y = (e.clientY - rect.top) / rect.height - 0.5;
+      cardEl.style.transform = 'perspective(1000px) rotateY(' + (x * 25) + 'deg) rotateX(' + (-y * 20) + 'deg)';
+    });
+    wrap.addEventListener('mouseleave', function() {
+      cardEl.style.transform = 'perspective(1000px) rotateY(0) rotateX(0)';
+    });
+  }
+}
+
+var cards3DBound = false;
+var freezeBound = false;
+var otherCardBtnsBound = false;
+
+function initCards3D() {
+  var card = document.getElementById('card-3d-main');
+  var wrap = document.getElementById('card-3d-main-wrap');
+  if (!card || !wrap) return;
+
+  if (!cards3DBound) {
+    cards3DBound = true;
+    wrap.addEventListener('mousemove', function(e) {
+      var rect = wrap.getBoundingClientRect();
+      var x = (e.clientX - rect.left) / rect.width - 0.5;
+      var y = (e.clientY - rect.top) / rect.height - 0.5;
+      card.style.transform = 'perspective(1200px) rotateY(' + (x * 30) + 'deg) rotateX(' + (-y * 25) + 'deg) scale(1.02)';
+    });
+    wrap.addEventListener('mouseleave', function() {
+      card.style.transform = 'perspective(1200px) rotateY(0) rotateX(0) scale(1)';
+    });
+  }
+
+  if (!freezeBound) {
+    freezeBound = true;
+    var frozen = false;
+    document.getElementById('freeze-card-btn').addEventListener('click', function() {
+      frozen = !frozen;
+      if (frozen) {
+        this.innerHTML = '<i class="fas fa-fire" style="color:var(--danger);"></i>Unfreeze Card';
+        Toast.show('Card frozen successfully', 'info');
+      } else {
+        this.innerHTML = '<i class="fas fa-snowflake" style="color:var(--accent-2);"></i>Freeze Card';
+        Toast.show('Card unfrozen successfully', 'info');
+      }
+    });
+  }
+
+  if (!otherCardBtnsBound) {
+    otherCardBtnsBound = true;
+    document.querySelectorAll('.card-action-btn[data-card-action]').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var action = btn.dataset.cardAction;
+        var labels = { limits: 'Set Limits', pin: 'Change PIN', statement: 'View Statement' };
+        Toast.show((labels[action] || action) + ' — Feature coming soon', 'info');
+      });
+    });
+  }
+}
+
+function initTheme() {
+  var saved = localStorage.getItem('mexico-theme');
+  if (saved) {
+    document.documentElement.setAttribute('data-theme', saved);
+  } else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+    document.documentElement.setAttribute('data-theme', 'light');
+  }
+  updateThemeIcon();
+
+  document.getElementById('theme-toggle').addEventListener('click', function() {
+    var current = document.documentElement.getAttribute('data-theme');
+    var next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('mexico-theme', next);
+    updateThemeIcon();
+    var st = document.getElementById('settings-dark-toggle');
+    if (st) st.checked = next === 'dark';
+  });
+
+  document.getElementById('settings-dark-toggle').addEventListener('change', function(e) {
+    var theme = e.target.checked ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('mexico-theme', theme);
+    updateThemeIcon();
+  });
+
+  document.getElementById('language-btn').addEventListener('click', function() { Toast.show('Language selection coming soon', 'info'); });
+}
+
+function updateThemeIcon() {
+  var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  var icon = document.querySelector('#theme-toggle i');
+  if (icon) icon.className = isDark ? 'fas fa-moon' : 'fas fa-sun';
+}
+
+function initSettings() {
+  document.getElementById('delete-account-btn').addEventListener('click', function() {
+    Modal.open('Delete Account',
+      '<div class="modal-body"><p>Are you sure you want to delete your account? This action is irreversible and all your data will be permanently lost.</p></div>',
+      '<div class="modal-footer"><button class="btn btn-secondary btn-sm" id="modal-cancel-btn">Cancel</button><button class="btn btn-sm" style="background:var(--danger);color:#fff;" id="modal-delete-btn">Delete Permanently</button></div>'
+    );
+    setTimeout(function() {
+      var cancelBtn = document.getElementById('modal-cancel-btn');
+      var deleteBtn = document.getElementById('modal-delete-btn');
+      if (cancelBtn) cancelBtn.addEventListener('click', function() { Modal.close(); });
+      if (deleteBtn) deleteBtn.addEventListener('click', function() { Modal.close(); Toast.show('Account deletion cancelled — this is a demo', 'info'); });
+    }, 50);
+  });
+}
+
+function initModal() {
+  document.getElementById('modal-close').addEventListener('click', function() { Modal.close(); });
+  document.getElementById('modal-overlay').addEventListener('click', function(e) { if (e.target === e.currentTarget) Modal.close(); });
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') Modal.close(); });
+}
+
+function initEasterEgg() {
+  var seq = [];
+  var code = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','KeyB','KeyA'];
+  document.addEventListener('keydown', function(e) {
+    seq.push(e.code);
+    if (seq.length > code.length) seq.shift();
+    if (seq.join(',') === code.join(',')) matrixRain();
+  });
+
+  function matrixRain() {
+    var canvas = document.createElement('canvas');
+    canvas.style.cssText = 'position:fixed;inset:0;z-index:99999;pointer-events:none;';
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    document.body.appendChild(canvas);
+    var ctx = canvas.getContext('2d');
+    var chars = 'MEXICO06D6A038BDF8';
+    var fontSize = 14;
+    var cols = Math.floor(canvas.width / fontSize);
+    var drops = [];
+    for (var i = 0; i < cols; i++) drops.push(1);
+    var frames = 0;
+    function animate() {
+      ctx.fillStyle = 'rgba(8,12,24,0.08)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#06D6A0';
+      ctx.font = fontSize + 'px "JetBrains Mono", monospace';
+      for (var i = 0; i < drops.length; i++) {
+        var ch = chars[Math.floor(Math.random() * chars.length)];
+        ctx.fillText(ch, i * fontSize, drops[i] * fontSize);
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+        drops[i]++;
+      }
+      frames++;
+      if (frames < 300) requestAnimationFrame(animate);
+      else {
+        canvas.style.transition = 'opacity 0.5s';
+        canvas.style.opacity = '0';
+        setTimeout(function() { if (canvas.parentNode) canvas.parentNode.removeChild(canvas); }, 500);
+      }
+    }
+    requestAnimationFrame(animate);
+    Toast.show('You found the secret! Have a cookie', 'success');
+  }
+}
+
+function initResize() {
+  var timer;
+  window.addEventListener('resize', function() {
+    clearTimeout(timer);
+    timer = setTimeout(function() {
+      if (document.getElementById('view-dashboard').classList.contains('active') && dashboardInited) {
+        var activeTab = document.querySelector('.chart-tab.active');
+        if (activeTab) renderChart(activeTab.dataset.period);
+      }
+    }, 250);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  initPreloader();
+  initCursor();
+  initParticles();
+  initAuth();
+  initNavigation();
+  initTransactionsPage();
+  initTransferPage();
+  initTheme();
+  initSettings();
+  initModal();
+  initEasterEgg();
+  initResize();
+});
+
+</script>
+</body>
+</html>
